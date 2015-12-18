@@ -8,7 +8,7 @@ description: > # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://tech.liftforward.com" # the base hostname & protocol for your site
 twitter_username: liftforward
-github_username:  drewnichols
+# github_username:  drewnichols
 
 # Build settings
 markdown: kramdown
