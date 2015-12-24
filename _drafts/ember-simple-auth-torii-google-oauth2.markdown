@@ -12,6 +12,23 @@ How to setup and use ember-simple-auth 1.0+ with torii and google oauth2 authent
  [This page](https://developers.google.com/identity/protocols/OAuth2) gives a overview of the process but I'll walk you through the basic steps here. (if you have already completed this you can skip to Creating your ember project).
  
 1. First you need create your account by visiting here: https://console.developers.google.com and signup with your gmail account. (I used my private account for this walkthough and I don't believe I had registered it before. Hopefully your experience is the same.)
+
+![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-01.png){: .screenshot}
+
+![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-02.png){: .screenshot}
+
+![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-03.png){: .screenshot}
+
+![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-04.png){: .screenshot}
+
+![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-05.png){: .screenshot}
+
+![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-06.png){: .screenshot}
+
+![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-07.png){: .screenshot}
+
+![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-08.png){: .screenshot}
+
 2. Once you're signed in you'll want to enable apis for your project. In my case this also required creating the application.
 TODO add the rest with screen shots
 
