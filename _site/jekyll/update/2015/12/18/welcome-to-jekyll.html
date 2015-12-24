@@ -7,8 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>Authentication via Google Oauth2 with Ember-Simple-Auth and Torii</title>
-    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-">
+    <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
     <link rel="canonical" href="http://tech.liftforward.com/jekyll/update/2015/12/18/welcome-to-jekyll.html">
@@ -64,92 +63,114 @@
   <article class="post-content">
     <p>How to setup and use ember-simple-auth 1.0+ with torii and google oauth2 authentication.</p>
 
-<ol>
-  <li>Getting Google OAUTH Keys</li>
-</ol>
+<h3 id="getting-google-oauth-keys">Getting Google OAUTH Keys</h3>
 
-<p>This page (https://developers.google.com/identity/protocols/OAuth2) gives a overview of the process but I’ll walk you through the basic steps here. I’ll walk you through it here step by step. (if you have already completed this you can skip to step TBD).</p>
-
-<p>First you need create your account by visiting here: https://console.developers.google.com and signup with your gmail account. (I used my private account for this walkthough and I don’t believe I had registered it before. Hopefully your experience is the same.) Once you’re signed in you’ll want to enable apis for your project. In my case this also required creating the application.</p>
+<p><a href="https://developers.google.com/identity/protocols/OAuth2">This page</a> gives a overview of the process but I’ll walk you through the basic steps here. (if you have already completed this you can skip to Creating your ember project).</p>
 
 <ol>
-  <li>Create your ember project</li>
+  <li>First you need create your account by visiting here: https://console.developers.google.com and signup with your gmail account. (I used my private account for this walkthough and I don’t believe I had registered it before. Hopefully your experience is the same.)</li>
+  <li>Once you’re signed in you’ll want to enable apis for your project. In my case this also required creating the application.<br />
+TODO add the rest with screen shots</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">ember init ember-simple-auth-torii-google</code></pre></div>
+<h3 id="create-your-ember-project">Create your ember project</h3>
 
-<ol>
-  <li>Install simple auth and tori</li>
-</ol>
+<p>Here I’m assuming you’ve already installed ember and are familiar with it. If not <a href="http://lmgtfy.com/?q=installing+ember">click here</a></p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">ember install ember-simple-auth
-ember install torii</code></pre></div>
+<pre><code>ember init ember-simple-auth-torii-google
+</code></pre>
 
-<ol>
-  <li>Setup application controller</li>
-</ol>
+<h3 id="install-simple-auth-and-tori">Install simple auth and tori</h3>
 
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">import</span> <span class="nx">Ember</span> <span class="nx">from</span> <span class="s1">&#39;ember&#39;</span><span class="p">;</span>
+<pre><code>ember install ember-simple-auth
+ember install torii
+</code></pre>
 
-<span class="kr">export</span> <span class="k">default</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Controller</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-  <span class="nx">session</span><span class="o">:</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">inject</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;session&#39;</span><span class="p">),</span>
-  <span class="nx">actions</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">authenticateSession</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;session&#39;</span><span class="p">).</span><span class="nx">authenticate</span><span class="p">(</span><span class="s1">&#39;authenticator:torii&#39;</span><span class="p">,</span> <span class="s1">&#39;google-oauth2&#39;</span><span class="p">);</span>
-    <span class="p">},</span>
-    <span class="nx">invalidateSession</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;session&#39;</span><span class="p">).</span><span class="nx">invalidate</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">});</span></code></pre></div>
+<h3 id="setup-application-controller">Setup application controller</h3>
 
-<ol>
-  <li>Setup application template</li>
-</ol>
+<p>There are many ways to setup simple-auth to handle the different session actions used for authentiation. For the purposes of this tutorial I’ll keep my app simple and just use the application controller for everything. Here we are injecting the simple-auth session and handling the actions authenticateSession and invalidateSession to perform the login and logout actions respectively. In both cases the action just calls an appropriate method on the session.</p>
 
-<div class="highlight"><pre><code class="language-handlebars" data-lang="handlebars"><span class="x">&lt;h2 id=&quot;title&quot;&gt;Ember Simple Auth with Torii and Google&lt;/h2&gt;</span>
+<p>In the case of <code>authenticate</code> I’m passing the authenticator and TBD as parameters. Simple-auth comes with a bunch of builtin authenticators but in this case I need to use a custom one to handle the Oauth callback and serverside call required for authentication. By passing in “authenticator:torii” I’m telling simple-auth to look for the ember object defined in <code>/app/authenticator/torii.js</code>. The second parameter is for Torii but fuck all if i know what it does.</p>
 
-<span class="x">  &lt;div&gt;</span>
-<span class="x">    </span><span class="cp">{{</span><span class="k">#if</span> <span class="nv">session.isAuthenticated</span><span class="cp">}}</span><span class="x"></span>
-<span class="x">      &lt;a </span><span class="cp">{{</span><span class="nv">action</span> <span class="s1">&#39;invalidateSession&#39;</span><span class="cp">}}</span><span class="x">&gt;Logout&lt;/a&gt;</span>
-<span class="x">    </span><span class="cp">{{</span><span class="k">else</span><span class="cp">}}</span><span class="x"></span>
-<span class="x">      &lt;a </span><span class="cp">{{</span><span class="nv">action</span> <span class="s1">&#39;authenticateSession&#39;</span><span class="cp">}}</span><span class="x">&gt;Login&lt;/a&gt;</span>
-<span class="x">    </span><span class="cp">{{</span><span class="k">/if</span><span class="cp">}}</span><span class="x"></span>
-<span class="x">  &lt;/div&gt;</span></code></pre></div>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>  <span style="color:#080;font-weight:bold">import</span> Ember from <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">ember</span><span style="color:#710">'</span></span>;
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  <span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">default</span> Ember.Controller.extend({
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="color:#606">session</span>: Ember.inject.service(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">session</span><span style="color:#710">'</span></span>),
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    <span style="color:#606">actions</span>: {
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>      authenticateSession() {
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>        <span style="color:#950">this</span>.get(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">session</span><span style="color:#710">'</span></span>).authenticate(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">authenticator:torii</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">google-oauth2</span><span style="color:#710">'</span></span>);
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      },
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>      invalidateSession() {
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>        <span style="color:#950">this</span>.get(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">session</span><span style="color:#710">'</span></span>).invalidate();
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>      }
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>    }
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>  });
+</pre></div>
+</div>
+</div>
 
-<ol>
-  <li>Configuring Torii with your keys from google
- Now is when you’ll use the keys and callback url you created when setting up your google app and api client. You’ll want to add the following hash to the <code>//config/environment.js</code>. With these settings Torii will know what key to pass to Google when it visits the Google oauth2 authentication page (check name) and where to redirect to after the user has authenticated.</li>
-</ol>
+<h3 id="create-a-custom-torii-google-authenticator">Create a custom torii-google authenticator</h3>
+<p>Here I’ve created a custom authenticator which will handle authentication token returned by Google. Note that it extends the Torii authenticator built into simple-auth and overrides its authenticate method. When this is run it will cause Torii to open a popup showing the familiar Google authenticate user interface. When that’s complete and successful the popup will close and the token argument to the promise resolve will contain the Google Oauth token returned by google. Later we will send this token to our serverside to be resolved into the user’s email and google profile via google’s APIs.</p>
 
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">ENV</span><span class="p">.</span><span class="nx">torii</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">providers</span><span class="o">:</span> <span class="p">{</span>
-      <span class="s1">&#39;google-oauth2&#39;</span><span class="o">:</span> <span class="p">{</span>
-        <span class="nx">apiKey</span><span class="o">:</span> <span class="s2">&quot;161580081432-v9mnjust9nhchrf30ri81mtbr8mecje3.apps.googleusercontent.com&quot;</span><span class="p">,</span>
-        <span class="nx">redirectUri</span><span class="o">:</span> <span class="s2">&quot;http://localhost:4200/oauth2callback&quot;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">};</span></code></pre></div>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>  <span style="color:#777">//app/authenticators/torii.js</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  <span style="color:#080;font-weight:bold">import</span> Ember from <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">ember</span><span style="color:#710">'</span></span>;
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>  <span style="color:#080;font-weight:bold">import</span> Torii from <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">ember-simple-auth/authenticators/torii</span><span style="color:#710">'</span></span>;
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>  const { service } = Ember.inject;
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>  <span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">default</span> Torii.extend({
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    <span style="color:#606">torii</span>: service(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">torii</span><span style="color:#710">'</span></span>),
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    authenticate(options) {
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>      <span style="color:#950">this</span>._super(options).then(<span style="color:#080;font-weight:bold">function</span> (token) {
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>        console.log(options, data);
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>      });
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>    }
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>  });
+</pre></div>
+</div>
+</div>
 
-<ol>
-  <li>Create a custom torii-google authenticator
- Up till now most of what you’ve built has been boilerplate ember-simple-auth code taken right from the ember-simple-auth readme (https://github.com/simplabs/ember-simple-auth#readme). Now you’ll create a custom authenticator which will complete the authentication code returned by Google and allow us to use it get the user’s email address, name and google profile.</li>
-</ol>
+<h3 id="setup-application-template">Setup application template</h3>
 
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">//app/authenticators/torii.js</span>
-  <span class="kr">import</span> <span class="nx">Ember</span> <span class="nx">from</span> <span class="s1">&#39;ember&#39;</span><span class="p">;</span>
-  <span class="kr">import</span> <span class="nx">Torii</span> <span class="nx">from</span> <span class="s1">&#39;ember-simple-auth/authenticators/torii&#39;</span><span class="p">;</span>
+<p>Now I need a way to trigger the <code>authenticateSession</code> action so I created a super simple <code>appplication.hbs</code> with just a single link to trigger the action.</p>
 
-  <span class="kr">const</span> <span class="p">{</span> <span class="nx">service</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">inject</span><span class="p">;</span>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>  &lt;!-- //app/template/application.hbs --&gt;
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  &lt;h2 id=&quot;title&quot;&gt;Ember Simple Auth with Torii and Google&lt;/h2&gt;
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>  &lt;div&gt;
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span>    &lt;a {{action 'authenticateSession'}}&gt;Login&lt;/a&gt;
+<span class="line-numbers"><a href="#n7" name="n7">7</a></span>  &lt;/div&gt;
+</pre></div>
+</div>
+</div>
 
-  <span class="kr">export</span> <span class="k">default</span> <span class="nx">Torii</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-    <span class="nx">torii</span><span class="o">:</span> <span class="nx">service</span><span class="p">(</span><span class="s1">&#39;torii&#39;</span><span class="p">),</span>
-    <span class="nx">authenticate</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
-      <span class="p">});</span>
-    <span class="p">}</span>
-  <span class="p">});</span></code></pre></div>
+<h3 id="configuring-torii-with-your-keys-from-google">Configuring Torii with your keys from google</h3>
+
+<p>Now is when you’ll use the keys and callback url you created when setting up your google app and api client. You’ll want to add the following hash to the <code>//config/environment.js</code>. With these settings Torii will know what key to pass to Google when it visits the Google oauth2 authentication page (check name) and where to redirect to after the user has authenticated.</p>
+
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>  <span style="color:#777">//config/environment.js</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  ENV.torii = {
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="color:#606">providers</span>: {
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>      <span style="color:#606"><span style="color:#404">'</span><span>google-oauth2</span><span style="color:#404">'</span></span>: {
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>        <span style="color:#606">apiKey</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">161580081432-v9mnjust9nhchrf30ri81mtbr8mecje3.apps.googleusercontent.com</span><span style="color:#710">&quot;</span></span>,
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>        <span style="color:#606">redirectUri</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://localhost:4200/oauth2callback</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      }
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    }
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>  };
+</pre></div>
+</div>
+</div>
+
+<h3 id="run-it">Run it</h3>
+
+<p>Once you have this all together you should be all set to test out the app.</p>
 
 
   </article>
@@ -195,8 +216,7 @@ ember install torii</code></pre></div>
       </div>
 
       <div class="footer-col  footer-col-3">
-        <p class="text">Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-</p>
+        <p class="text"></p>
       </div>
     </div>
 
