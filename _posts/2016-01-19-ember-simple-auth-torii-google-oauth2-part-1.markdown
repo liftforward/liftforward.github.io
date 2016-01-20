@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title:  "Authentication via Google Oauth2 with Ember-Simple-Auth and Torii - Part 1"
 date:   2016-01-19 14:05:01
 categories:
