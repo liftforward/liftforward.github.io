@@ -2,7 +2,7 @@
 layout: post
 title:  "Authentication via Google Oauth2 with Ember-Simple-Auth and Torii - Part 1"
 date:   2016-01-19 14:05:01
-categories: jekyll update
+categories:
 ---
 
 In this post I'm going to walk though the process of setting up and using ember-simple-auth 1.0+ and Torii with Google Oauth2 authentication. When LiftForward first implemented this in our backoffice tool it was with simple-auth 0.X and things were much different. As we upgraded to 1.0 a few weeks ago I noticed there were little to no examples available using Google's Oauth authentication.
