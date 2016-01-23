@@ -1,11 +1,11 @@
 # Site settings
 title: LiftForward Tech Blog
 email: engineering@liftforward.com
-description: > # this means to ignore newlines until "baseurl:"
+description: "Musings of the LiftForward engineering team on Ember JS, Ruby and other stuff"
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://tech.liftforward.com" # the base hostname & protocol for your site
 twitter_username: liftforward
-# github_username:  drewnichols
+github_username:  liftforward
 
 # Build settings
 markdown: kramdown
