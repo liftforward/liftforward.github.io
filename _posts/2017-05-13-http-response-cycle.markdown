@@ -1,12 +1,11 @@
 ---
 layout: post
 comments: true
-title:  "Authentication via Google Oauth2 with Ember-Simple-Auth and Torii - Part 1"
-date:   2016-01-19 14:05:01
+title:  "The Internet and the HTTP Response Cycle"
+date:   2016-05-13 14:05:01
 categories:
 ---
 
-The Internet and the HTTP Response Cycle
 In order to get a deeper understanding of what all the Internet is and the processes running in the background, it's always been helpful for me to jump back and look at the bigger picture (coding takeaways applicable to life in general!) - making sense of the bigger picture.  Here, I'll tackle the topic of the Internet and certain concepts and subject.
 From a web developer's viewpoint, the Internet is a literal web, specifically of servers and users that exchange information through their network connection.  A web server is a software and/or hardware that stores the files and data of an application.  These files contain the HTML of the website and its assets, which would consist of CSS stylesheets  (styling), images, videos and other media, and Javascript files.
 The server will either return a static page or a dynamic page.  A static page would be any file that maintains its state and sent back simply as is.  A dynamic page is one that may have to be compiled or generated using a database before it is sent to the requesting client.
