@@ -13,28 +13,28 @@ I will explain some details of how Oauth works however is you're interested in a
 ## Step 1. Getting Your Google Oauth Keys
 
 If you have already completed this and have a Client ID and Client Secret you can skip to Creating your ember project.
-  
+
 1. First you need create your account by visiting here: [https://console.developers.google.com](https://console.developers.google.com) and signup with your gmail account. (I used my private account for this walkthough and I don't believe I had registered it before. I'm pretty sure your experience will be the same.
 ![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-01.png){: .screenshot}
 1. Once you've logged in click the *Enable and manage APIs* link.
 ![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-02.png){: .screenshot}
-1. This should open the new project modal which you'll need to complete. If you already have a project this will take you to the overview page shown in next. 
+1. This should open the new project modal which you'll need to complete. If you already have a project this will take you to the overview page shown in next.
 ![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-03.png){: .screenshot}
 1. From the overview page select *Credentials* from the left menu.
 ![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-04.png){: .screenshot}
-1. From here you can create multiple Oauth 2.0 client IDs for your app. For now you'll just create one for development. Eventually you'll need to created one for each environment you've deployed your app to. Select *Oauth consent screen* in that top menu as we need to configure that first. 
+1. From here you can create multiple Oauth 2.0 client IDs for your app. For now you'll just create one for development. Eventually you'll need to created one for each environment you've deployed your app to. Select *Oauth consent screen* in that top menu as we need to configure that first.
 ![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-05.png){: .screenshot}
 1. On this screen you'll configure what's shown to users in the Google's Oauth consent screen. For now just enter your app's name. The rest can be blank for our purposes. Once you're finished click save and then *Credentials* in that top menu.  
 ![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-06.png){: .screenshot}
 1. Now we'll create your apps first Client ID. Select *Oauth Client ID* from the New Credentials menu to start the process.
 ![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-07.png){: .screenshot}
-1. First select *Web application* as that's what we are setting up the IDs for. Next enter a name for this ID, I named these after the environments we have at LiftForward but you can use anything you want. For the *Authorized Javascript origins* use `http://localhost:4200`. (If you plan to run your EmberCLI application on a different port enter that port here.) For the *Authorized redirect URIs* enter the same hostname you first entered with a path of `/oauth2callback`. 
+1. First select *Web application* as that's what we are setting up the IDs for. Next enter a name for this ID, I named these after the environments we have at LiftForward but you can use anything you want. For the *Authorized Javascript origins* use `http://localhost:4200`. (If you plan to run your EmberCLI application on a different port enter that port here.) For the *Authorized redirect URIs* enter the same hostname you first entered with a path of `/oauth2callback`.
 
     These are very important becuase once you get your application running and attempt to display the google Oauth screen it will not work if the request doesn't come from the origin you list here and once the user completes the screen she will be redirected to the provided redirect URI with an auth token parameter that your app must consume.
 ![My helpful screenshot](/assets/ember-simple-auth-torii-google-oauth2/google-oauth2-08.png){: .screenshot}
-1. Click create and you'll get both your *Client ID* and client secret. Save both of these somewhere as you'll need the later on in this tutorial. 
+1. Click create and you'll get both your *Client ID* and client secret. Save both of these somewhere as you'll need the later on in this tutorial.
 
-That's it for setting up your OAUTH keys. Now onto building your ember app. 
+That's it for setting up your OAUTH keys. Now onto building your ember app.
 
 ## Step 2. Create your ember project
 
@@ -54,9 +54,9 @@ ember install torii
 
 ### Setup the application controller
 
-There are many ways to setup simple-auth to handle the different session actions used for authentiation. For the purposes of this tutorial I'll keep my app simple and just use the application controller for everything. Here we are injecting the simple-auth session and handling the actions authenticateSession and invalidateSession to perform the login and logout actions respectively. In both cases the action just calls an appropriate method on the session. 
+There are many ways to setup simple-auth to handle the different session actions used for authentiation. For the purposes of this tutorial I'll keep my app simple and just use the application controller for everything. Here we are injecting the simple-auth session and handling the actions authenticateSession and invalidateSession to perform the login and logout actions respectively. In both cases the action just calls an appropriate method on the session.
 
-In the case of ```authenticate``` I'm passing the authenticator and 'google-oauth2' as parameters. Simple-auth comes with a bunch of builtin authenticators but in this case I need to use a custom one to handle the Oauth callback and serverside call required for authentication. By passing in "authenticator:torii" I'm telling simple-auth to look for the ember object defined in ```/app/authenticator/torii.js```. The second parameter is for Torii and it tells Torii what Oauth2 system we are using. 
+In the case of ```authenticate``` I'm passing the authenticator and 'google-oauth2' as parameters. Simple-auth comes with a bunch of builtin authenticators but in this case I need to use a custom one to handle the Oauth callback and serverside call required for authentication. By passing in "authenticator:torii" I'm telling simple-auth to look for the ember object defined in ```/app/authenticator/torii.js```. The second parameter is for Torii and it tells Torii what Oauth2 system we are using.
 
 In the case of ```invalidate``` there are no parameters it simply calls the invalidate() method on session to logout the current user.
 
@@ -77,7 +77,7 @@ In the case of ```invalidate``` there are no parameters it simply calls the inva
 ```
 
 ### Create a custom torii-google authenticator
-Here I've created a custom authenticator which will handle authentication token returned by Google. Note that it extends the Torii authenticator built into simple-auth and overrides its authenticate method. When this is run it will call `this._super(options)` which will cause Torii to open a popup showing the familiar Google Oauth2 authentication interface and return a promise. When the user completes this screen and is successful the popup will close and the promise will resolve by calling the function supplied in the `then()` with Oauth token data as the argument. Later I will send this token to our serverside to be resolved into the user's email and google profile via google's APIs. For now I just display it in an alert. 
+Here I've created a custom authenticator which will handle authentication token returned by Google. Note that it extends the Torii authenticator built into simple-auth and overrides its authenticate method. When this is run it will call `this._super(options)` which will cause Torii to open a popup showing the familiar Google Oauth2 authentication interface and return a promise. When the user completes this screen and is successful the popup will close and the promise will resolve by calling the function supplied in the `then()` with Oauth token data as the argument. Later I will send this token to our serverside to be resolved into the user's email and google profile via google's APIs. For now I just display it in an alert.
 
 ```javascript
   //app/authenticators/torii.js
@@ -130,9 +130,8 @@ Here is where the keys and callback url created when setting up the google app a
 
 ### Run it
 
-Run `ember server` and hit [http://localhost:4200](http://localhost:4200) your browser. You should be shown the application route's tempate with a login link which when clicked will open the google Oauth consent screen. Once you click allow the promise created in the `authentiate` action will resolve and display the auth token returned by google in an alert box. 
+Run `ember server` and hit [http://localhost:4200](http://localhost:4200) your browser. You should be shown the application route's tempate with a login link which when clicked will open the google Oauth consent screen. Once you click allow the promise created in the `authentiate` action will resolve and display the auth token returned by google in an alert box.
 
 In Part 2 I'll walkthrough how to combine the authorization code with the secret key and resolve them into the user's name and email.
 
 All the source code I used in this post is available here: [https://github.com/drewnichols/ember-simple-auth-torii-google](https://github.com/drewnichols/ember-simple-auth-torii-google)
-
