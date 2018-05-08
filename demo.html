@@ -1,23 +1,21 @@
+
 <html>
   <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.css" />
     <script src="https://checkout.liftforward-staging.com/checkout.js"></script>
-  </head>
-  <body>
-    <div class="container">
-      <h1>LiftForward Checkout Demo</h1>
-      <br/>
-      <p>Checkout button container div:</p>
-      <div id="liftforward-checkout-button"></div>
-    </div>
+    <script>
+      //init the checkout library with merchant specific details
+      liftforward.init({ merchant_id: 'demo',
+                         public_key: '0ca310398a9d76765c79ba6bcacd18fd',
+                         environment: 'test'});
+    </script>
     <script>
       //create a onClick function which constructs the sales quote jason and passes it to checkout
-      var onClick = function() {
+      var onCheckoutButtonClick = function() {
         var salesQuote = {
           term: 24,
           total_sales_tax: 77.99,
           total_shipping_fee: 42.00,
-          partner_sales_quote_id: "2384757293848",
           customer_organization_name: "Los Polos Hermanos",
           customer_first_name: "Gus",
           customer_last_name: "Fring",
@@ -26,28 +24,41 @@
             title: "Point of Sale System",
             sku: "H-BM1-WW",
             unit_sale_price: 199.99,
-            image_url: "https://jumbotron-production-f.squarecdn.com/assets/129869ad5838545704cd.jpg"
+            image_url: "http://evasgeektoys.weebly.com/uploads/2/4/3/8/24380999/s172252650612929272_p4_i1_w244.jpeg"
           }]
         };
-
         let options = {
           merchantCheckoutId: 'ch-03u849vs2f',
           chargeAuthorizedUrl: 'https://tech.liftforward.com/thank-you.html'
         }
-
         liftforward.checkout(salesQuote, options);
       }
-
-      //init the checkout library with your environment specific details
-      liftforward.init({ merchant_id: 'pugetsystems',
-                         public_key: '7beaee5303d8f4673980b9336488aace',
-                         environment: 'test'});
-
-      //render the checkout button with the button function
-      // button take 2 arguments:
-      // 1. a selector for the container it should render into
-      // 2. the function to call when a user clicks it
-      liftforward.button('#liftforward-checkout-button', onClick);
     </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 text-center">
+          <h1>LiftForward Checkout Demo</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-6 text-center">
+          <h3>rendered via checkout library</h3>
+          <div id="liftforward-checkout-button"></div>
+          <script>
+            //render the checkout button with the button function
+            // button take 2 arguments:
+            // 1. a selector for the container it should render into
+            // 2. the function to call when a user clicks it
+            liftforward.button('#liftforward-checkout-button', onCheckoutButtonClick);
+          </script>
+        </div>
+        <div class="col-xs-12 col-md-6 text-center">
+          <h3>rendered via simple html button</h3>
+          <button class="btn btn-lg btn-outline-primary btn-primary" onclick="onCheckoutButtonClick()">Checkout</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
