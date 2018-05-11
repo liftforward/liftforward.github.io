@@ -14,7 +14,6 @@
       var onCheckoutButtonClick = function() {
         var salesQuote = {
           term: 24,
-          total_sales_tax: 77.99,
           total_shipping_fee: 42.00,
           customer_organization_name: "Los Polos Hermanos",
           customer_first_name: "Gus",
@@ -28,8 +27,8 @@
           }]
         };
         let options = {
-          merchantCheckoutId: 'ch-03u849vs2f',
-          chargeAuthorizedUrl: 'https://tech.liftforward.com/thank-you.html'
+          merchant_checkout_id: 'ch-03u849vs2f',
+          charge_authorized_url: 'https://tech.liftforward.com/thank-you.html'
         }
         liftforward.checkout(salesQuote, options);
       }
